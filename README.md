@@ -12,7 +12,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  your_package_name: ^1.0.0
+  pagination_scroll_view: ^1.0.0
 ```
 
 ## Usage
