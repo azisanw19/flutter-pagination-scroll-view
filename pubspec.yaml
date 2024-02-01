@@ -1,0 +1,19 @@
+name: pagination_scroll_view
+description: "Pagination Scroll View by azisanw19@gmail.com"
+version: 0.0.1
+homepage: https://github.com/azisanw19/flutter-pagination-scroll-view
+
+environment:
+  sdk: '>=3.2.2 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
