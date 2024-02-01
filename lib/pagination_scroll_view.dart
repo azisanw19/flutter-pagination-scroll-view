@@ -1,7 +1,2 @@
-library pagination_scroll_view;
-
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/pagination_scroll_view.dart';
+export 'src/model/scroll_options.dart';
