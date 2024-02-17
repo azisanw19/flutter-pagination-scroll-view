@@ -7,3 +7,7 @@
 * Added RefreshIndicator support
 * Added onRefresh callback
 * Added refreshIndicatorOptions
+
+## 1.1.1
+
+* Added RefreshOptions
