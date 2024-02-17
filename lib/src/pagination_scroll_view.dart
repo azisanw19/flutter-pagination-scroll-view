@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pagination_scroll_view/src/model/refresh_options.dart';
 import 'package:pagination_scroll_view/src/model/scroll_options.dart';
 
 class PaginationScrollView extends StatefulWidget {
@@ -10,6 +11,8 @@ class PaginationScrollView extends StatefulWidget {
     required this.child,
     this.initialPage = 1,
     this.scrollOptions = const ScrollOptions(),
+    this.onRefresh,
+    this.refreshOptions = const RefreshOptions(),
   }) : super(key: key);
 
   /// The widget below this widget in the tree.
@@ -36,6 +39,13 @@ class PaginationScrollView extends StatefulWidget {
 
   final ScrollOptions scrollOptions;
 
+  /// A function that's called when the user has dragged the refresh indicator
+  /// far enough to demonstrate that they want the app to refresh. The returned
+  /// [Future] must complete when the refresh operation is finished.
+  /// only can use if [ScrollOptions.scrollDirection] is [Axis.vertical]
+  final RefreshCallback? onRefresh;
+
+  final RefreshOptions refreshOptions;
 
   @override
   State<PaginationScrollView> createState() => _PaginationScrollViewState();
@@ -48,26 +58,19 @@ class _PaginationScrollViewState extends State<PaginationScrollView> {
   /// The current page of the pagination.
   late int _currentPage;
 
-  @override
-  void initState() {
-    _previousMaxScroll = 0.0;
+  late Key _singleChildScrollViewKey;
+
+  /// Set the initial value of the pagination.
+  void _setInitialValue() {
+    _previousMaxScroll = 0;
     _currentPage = widget.initialPage;
-    super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return NotificationListener<ScrollNotification>(
-      key: const Key("PaginationScrollView"),
-      onNotification: _onNotification,
-      child: SingleChildScrollView(
-          physics: widget.scrollOptions.physics,
-          reverse: widget.scrollOptions.reverse,
-          scrollDirection: widget.scrollOptions.scrollDirection,
-          keyboardDismissBehavior: widget.scrollOptions.keyboardDismissBehavior,
-          child: widget.child
-      ),
-    );
+  void initState() {
+    _setInitialValue();
+    _singleChildScrollViewKey = const Key("SingleChildScrollView");
+    super.initState();
   }
 
   /// Return false to allow the notification to continue to be dispatched to further ancestors.
@@ -81,9 +84,48 @@ class _PaginationScrollViewState extends State<PaginationScrollView> {
       _previousMaxScroll = maxScroll;
       _currentPage++;
       widget.pageChanged(_currentPage);
-      return false;
+    }
+
+    return widget.refreshOptions.notificationPredicate(scrollNotification);
+  }
+
+  Widget _containsSingleChildScrollView(Widget child) {
+    return SingleChildScrollView(
+      key: _singleChildScrollViewKey,
+      physics: widget.scrollOptions.physics,
+      reverse: widget.scrollOptions.reverse,
+      scrollDirection: widget.scrollOptions.scrollDirection,
+      keyboardDismissBehavior: widget.scrollOptions.keyboardDismissBehavior,
+      child: child,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.onRefresh != null) {
+      return RefreshIndicator.adaptive(
+        key: const Key("RefreshIndicator"),
+        onRefresh: () {
+          _setInitialValue();
+          return widget.onRefresh!();
+        },
+        backgroundColor: widget.refreshOptions.backgroundColor,
+        color: widget.refreshOptions.color,
+        displacement: widget.refreshOptions.displacement,
+        edgeOffset: widget.refreshOptions.edgeOffset,
+        notificationPredicate: _onNotification,
+        semanticsLabel: widget.refreshOptions.semanticsLabel,
+        semanticsValue: widget.refreshOptions.semanticsValue,
+        strokeWidth: widget.refreshOptions.strokeWidth,
+        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        child: _containsSingleChildScrollView(widget.child),
+      );
     } else {
-      return true;
+      return NotificationListener<ScrollNotification>(
+        key: const Key("PaginationScrollView"),
+        onNotification: _onNotification,
+        child: _containsSingleChildScrollView(widget.child),
+      );
     }
   }
 }

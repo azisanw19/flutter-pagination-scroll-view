@@ -26,11 +26,19 @@ class _MyAppState extends State<MyApp> {
       body: PaginationScrollView(
         key: const Key("pagination_scroll_view"),
         pageChanged: (page) {
+          print("page $page");
           setState(() {
-            _itemCount += 20;
+            _itemCount += 5;
           });
         },
-        threshold: 0.8,
+        onRefresh: () {
+          print("onRefresh");
+          setState(() {
+            _itemCount = 5;
+          });
+          return Future<void>.delayed(const Duration(seconds: 2));
+        },
+        threshold: 1,
         scrollOptions: const ScrollOptions(
           physics: BouncingScrollPhysics(),
         ),
