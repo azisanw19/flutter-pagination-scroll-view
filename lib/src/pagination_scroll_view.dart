@@ -117,7 +117,7 @@ class _PaginationScrollViewState extends State<PaginationScrollView> {
         semanticsLabel: widget.refreshOptions.semanticsLabel,
         semanticsValue: widget.refreshOptions.semanticsValue,
         strokeWidth: widget.refreshOptions.strokeWidth,
-        triggerMode: RefreshIndicatorTriggerMode.anywhere,
+        triggerMode: widget.refreshOptions.triggerMode,
         child: _containsSingleChildScrollView(widget.child),
       );
     } else {

@@ -1,4 +1,4 @@
-# Scroll Time Picker
+# Pagination Scroll View
 
 [![Flutter Package](https://img.shields.io/pub/v/pagination_scroll_view.svg)](https://pub.dev/packages/pagination_scroll_view)
 [![Pub Points](https://img.shields.io/pub/points/pagination_scroll_view)](https://pub.dev/packages/pagination_scroll_view/score)
@@ -12,7 +12,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  pagination_scroll_view: ^1.0.0
+  pagination_scroll_view: ^1.1.2
 ```
 
 ## Usage

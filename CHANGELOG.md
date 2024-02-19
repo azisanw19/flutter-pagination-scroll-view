@@ -11,3 +11,8 @@
 ## 1.1.1
 
 * Added RefreshOptions
+
+## 1.1.2
+
+* Fix Readme.md
+* Bug refresh trigger mode in refreshIndicatorOptions
